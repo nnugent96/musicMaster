@@ -41,10 +41,10 @@ class App extends Component {
     }
   }
 
-  render(){
+  render (){
     const { artist, topTracks } = this.state;
 
-    return(
+    return (
       <div>
         <h1>Music Master</h1>
         <input

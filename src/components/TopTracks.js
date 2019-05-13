@@ -1,10 +1,36 @@
 import React from 'react';
-import spotifyLogo from "../assets/spotify_logo.png";
+import Track from './Track';
 
-const TopTracks = ({topTracks, artistName}) => {
-  return (
-    topTracks.length && topTracks.length > 0 ?  (
-      <table style={{textAlign:"justify", width:"100%"}}>
+class TopTracks extends React.Component {
+  state = {
+    playingAudio: false,
+    audio: null, 
+    playingUrl: null
+  };
+
+  playAudio = previewUrl => () => {
+    const audio = new Audio(previewUrl);
+    const { playingAudio, playingUrl } = this.state;
+
+    if (!playingAudio) {
+      audio.play();
+      this.setState({ playingAudio: true, audio, playingUrl: previewUrl });
+    } else if (playingUrl === previewUrl) {
+      this.state.audio.pause();
+      this.setState({ playingAudio: false });
+    } else {
+      this.state.audio.pause();
+      audio.play();
+      this.setState({ playingAudio: true, audio, playingUrl: previewUrl });
+    }
+  }
+
+  render () {
+    const { topTracks, artistName } = this.props;
+
+    return (
+      topTracks.length && topTracks.length > 0 ? (
+        <table style={{textAlign:"justify", width:"100%"}}>
         <thead>
           <tr>
             <th></th>
@@ -16,52 +42,15 @@ const TopTracks = ({topTracks, artistName}) => {
         </thead>
         <tbody>
           {
-            topTracks.map( track => {
-              return (
-                <tr key={track.id}>
-                  <td style={{margin:"20px"}}>
-                    <img src={track.album.images[2].url} alt="Album art." />
-                  </td>
-                  <td style={{paddingRight:"50px"}}>
-                    {track.name}
-                  </td>
-                  <td style={{paddingRight:"50px"}}>
-                    {artistName}
-                    {
-                      track.artists.map( art => {
-                        if (art.name != artistName){
-                          return (`, ${art.name}`)
-                        }
-                      })
-                    }
-                  </td>
-                  <td>
-                    <SongDuration duration_ms={track.duration_ms} />
-                  </td>
-                  <td>
-                    <a href={track.external_urls.spotify} target="_blank">
-                      <img
-                        src={spotifyLogo}
-                        alt="Spotify logo"
-                        width="75px"
-                        margin="-10px"
-                        />
-                    </a>
-                  </td>
-                </tr>
-              );
-            })
+            topTracks.map( track => (
+              <Track key={track.id} playAudio={this.playAudio(track.preview_url)}  track={track} artistName={artistName} />
+            ))
           }
         </tbody>
       </table>
-    ) : <h3 style={{marginTop:"100px"}}>No tracks found</h3>
-  )
-}
-
-const SongDuration = ({ duration_ms }) => {
-  let duration_minutes = Math.round(duration_ms / 60000);
-  let remaining_s = Math.round((duration_ms % 60000) / 1000);
-  return(`${duration_minutes}:${remaining_s}`)
+    ) : <h3 style={{margin:"100px"}}>No tracks found</h3>
+    )
+  }
 }
 
 export default TopTracks;
