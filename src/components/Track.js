@@ -7,7 +7,7 @@ const Track = ({ track, artistName, playAudio }) => {
   return (
     <tr onClick={playAudio}>
       <td>
-        <img src={album.images[2].url} alt="Album art." />
+        <img style={{ width:'80px', height:'80px' }} src={album.images[1].url} alt="Album art." />
       </td>
       <td>
         {name}

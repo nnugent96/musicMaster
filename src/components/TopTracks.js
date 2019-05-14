@@ -31,12 +31,12 @@ class TopTracks extends React.Component {
     return (
       topTracks.length && topTracks.length > 0 ? (
         <table style={{textAlign:"justify", width:"100%"}}>
-        <thead>
+        <thead className="h3">
           <tr>
             <th></th>
-            <th className="h3">Title</th>
-            <th className="h3">Artists</th>
-            <th className="h3">Duration</th>
+            <th>Title</th>
+            <th>Artists</th>
+            <th>Duration</th>
             <th></th>
           </tr>
         </thead>
